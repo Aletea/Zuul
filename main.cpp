@@ -7,14 +7,14 @@
 #include <cstdlib>
 //methods
 void goRoom(char demand[], vector<room*> rooms, room* &currentRoom);
-void displayRoom(room* nowRoom, vector<items*> inventory, int &done);
+void displayRoom(room* nowRoom, vector<items*>* inventory, int &done);
 void finalRoom();
 
 
 int main() {
   //rooms, inventory, current room 
   vector<room*> rooms;
-  vector<items*> inventory;
+  vector<items*>*inventory = new vector<items*>();
   room* currentRoom;
   
   int answer = 0;
@@ -114,7 +114,7 @@ int main() {
   coffinRoom->setExits(outsideMap);
   //items, flashlight goes in inventory vector
   items* flashlight = new items("flashlight", 0);
-  inventory.push_back(flashlight);
+  inventory->push_back(flashlight);
   items* backDoorKey = new items("Silver Key", 1);
   items* unmarkedRoomKey = new items("Copper Key", 1);
   items* metalDoorKey = new items("Black Key", 1);
@@ -190,9 +190,9 @@ int main() {
     //try this, if it doesn't work, go back to the top
     try {
       //enter command
-      char command[20];
+      char command[50];
       cout << endl << "command: " << endl;
-    cin.get(command, 20);
+    cin.get(command, 50);
     cin.get();
     char keyWord[5];
     char demand[20];
@@ -215,33 +215,34 @@ int main() {
     demand[count] = '\0';
     //based on key word, go to a room, get an item, drop an item, or print inventory
     if (strcmp(keyWord, "go") == 0) {
-      
       goRoom(demand, rooms, currentRoom);
     }
+    
     else if (strcmp(keyWord, "get") == 0) {
-      //get the item
-      
+      //get the item if it exists     
 	if (currentRoom->giveItem(demand) != NULL) {
-	inventory.push_back(currentRoom->giveItem(demand));
-	cout << "I hope you're happy with your " << demand << endl;
+	  cout << "here" << endl;
+	  inventory->push_back(currentRoom->giveItem(demand));
+	  cout << "I hope you're happy with your " << demand << endl;
 	}
 	else {
-	cout << "This item is not in here. It may not exist at all." << endl;
+	  cout << "This item is not in here. It may not exist at all." << endl;
 	}
       //back to top
       goto playerInput;
     }
+    
     else if (strcmp(keyWord, "drop") == 0) {
       //find the item by running through inventory
       //drop item
       vector<items*>::iterator it;
       items* dropItem = NULL;
-      for (it = inventory.begin(); it != inventory.end(); it++) {
+      for (it = inventory->begin(); it != inventory->end(); it++) {
 	if (strcmp((*it)->getName(), demand) == 0) {
 	  dropItem = (*it);
 	  currentRoom->addItem(dropItem);
 	  cout << "You've rid of this item. It belongs to the room now." << endl;
-	  inventory.erase(it);
+	  inventory->erase(it);
 	  break;
 	}
       }
@@ -267,7 +268,7 @@ int main() {
       //iterate through and print
       vector<items*>::iterator it;
       cout << "Inventory:" << endl;
-      for (it = inventory.begin(); it != inventory.end(); it++) {
+      for (it = inventory->begin(); it != inventory->end(); it++) {
 	cout << (*it)->getName() << endl;
       }
       goto playerInput;
@@ -286,13 +287,13 @@ int main() {
   return 0;
 }
 //displays exits, items, and description
-void displayRoom(room* nowRoom, vector<items*> inventory, int &done) {
+void displayRoom(room* nowRoom, vector<items*>* inventory, int &done) {
   //if you've won (outside w daniel), end game
   if (strcmp(nowRoom->getRoomName(), "Outside")) {
     //check if u have daniel
     bool haveDaniel = false;
     vector<items*>::iterator it;
-    for (it = inventory.begin(); it != inventory.end(); it++) {
+    for (it = inventory->begin(); it != inventory->end(); it++) {
       if (strcmp((*it)->getName(), "Daniel") == 0) {
 	haveDaniel == true;
 	break;

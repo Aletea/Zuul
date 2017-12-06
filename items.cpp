@@ -1,10 +1,12 @@
 #include <iostream>
 #include "items.h"
+#include <cstring>
 
 using namespace std;
 //initialize
 items::items (char itemTitle[], int description) {
-  itemName = itemTitle;
+  itemName = new char[20];
+  strcpy(itemName, itemTitle);
   descriptionMethod = description;
 }
 //get name
