@@ -16,6 +16,7 @@ class room {
   void setItems(vector<items*>* newItems);
   void setExits(map<char*, room*>* newExits);
   void getItems();
+  bool checkItem(char item[]);
   items* giveItem(char item[]);
   void getExits();
   map<char*, room*>* returnExits();

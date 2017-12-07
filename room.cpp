@@ -45,6 +45,17 @@ void room::getItems() {
   }
 }
 
+bool room::checkItem(char item[]) {
+  vector<items*>::iterator it;
+  for (it = roomItems->begin(); it != roomItems->end(); it++) {
+    char* itemName = (*it)->getName();
+    if (strcmp(itemName, item) == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 //find item in room by running through iterator
 //return that item
 //erase it from this room's items
