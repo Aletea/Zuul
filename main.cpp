@@ -390,6 +390,11 @@ void goRoom(char demand[], vector<room*> rooms, room* &currentRoom) {
     cout << "This is not an exit. Maybe you should look at the exits again." << endl;
   }
 }
-
-
-
+//Sole Purpose: To make this program 400 lines
+void neverUsed() {
+  int noValue;
+  char unImportant;
+  float completelyPointless;
+  cout << "You'll never see this" << endl;
+  cin >> noValue;
+}
